@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean class="org.apache.cxf.jaxws.JaxWsServerFactoryBean" init-method="create">
+		<property name="address" value="/devis/v1"/>
+		<property name="bus" ref="cxfBus"/>
+		<property name="serviceBean">
+			<bean class="org.hms4j.example.jaxws.devis.service.impl.DevisServiceImpl"/>
+		</property>
+	</bean>
+
+</beans>

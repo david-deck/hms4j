@@ -1,0 +1,14 @@
+dependencies() {
+
+	implementation	("opensymphony:quartz:${quartzVersion}")
+
+	implementation	("org.apache.cxf:cxf-rt-frontend-jaxrs:${cxfVersion}")
+	implementation	("org.apache.cxf:cxf-rt-rs-service-description-swagger:${cxfVersion}")
+
+	implementation	("org.slf4j:jcl-over-slf4j:${slf4jVersion}")
+
+	implementation	("org.springframework:spring-context:${springVersion}")
+	// bug spring 2.0-rc2
+	implementation	("org.springframework:spring-beans:${springVersion}")
+	implementation	("org.springframework:spring-core:${springVersion}")
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="cxfBus" class="org.apache.cxf.BusFactory" factory-method="getDefaultBus">
+		<property name="features">
+			<list>
+				<bean class="org.apache.cxf.feature.LoggingFeature"/>
+				<bean class="org.apache.cxf.jaxrs.swagger.SwaggerFeature"/>
+			</list>
+		</property>
+	</bean>
+
+<!-- 	<bean id="cxfServlet" class="org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet"> -->
+	<bean id="cxfServlet" class="org.apache.cxf.transport.servlet.CXFNonSpringServlet">
+		<property name="bus" ref="cxfBus"/>
+	</bean>
+
+</beans>

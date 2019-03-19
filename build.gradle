@@ -1,0 +1,165 @@
+buildscript() {
+
+	repositories() {
+
+		maven() {
+
+			url("${artifactoryHostUrl}/gradle-plugins")
+		}
+	}
+
+	dependencies() {
+
+		// OSGi
+		classpath("biz.aQute.bnd:biz.aQute.bnd.gradle:4.1.0")
+		// APT (OpenPojo)
+		classpath("net.ltgt.gradle:gradle-apt-plugin:0.15")
+		// Release
+		classpath("net.researchgate:gradle-release:2.7.0")
+		// SonarQube
+		classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2")
+	}
+}
+
+allprojects() {
+
+	repositories() {
+	
+		maven() {
+	
+			url("${artifactoryHostUrl}/libs")
+		}
+	}
+}
+
+subprojects() {
+
+	apply(plugin: "java")
+
+	// Targeted JDK: https://docs.gradle.org/current/userguide/building_java_projects.html#sec:java_cross_compilation
+
+	sourceCompatibility = targetJavaVersion
+
+	def javaExecutablesPath = new File(javaHome, "bin")
+	def javaExecutables = [:].withDefault() { execName ->
+		def executable = new File(javaExecutablesPath, execName)
+		executable
+	}
+
+	tasks.withType(AbstractCompile) {
+
+		options.with() {
+
+			encoding = "UTF-8"
+			fork = true
+			forkOptions.javaHome = file(javaHome)
+			incremental = "true"
+		}
+	}
+
+	tasks.withType(Javadoc) {
+
+		executable = javaExecutables.javadoc
+	}
+
+	tasks.withType(JavaExec) {
+
+		executable = javaExecutables.java
+	}
+
+	tasks.withType(Test) {
+
+		executable = javaExecutables.java
+	}
+
+	// Tests
+
+	dependencies() {
+
+		implementation			("org.slf4j:slf4j-api:${slf4jVersion}")
+
+		testImplementation		("com.openpojo:openpojo:0.8.10")
+
+		testImplementation		("junit:junit:${junitVersion}")
+
+		testImplementation		("net.karneim:pojobuilder:${pojobuilderVersion}:annotations")
+		testAnnotationProcessor	("net.karneim:pojobuilder:${pojobuilderVersion}:jar-with-dependencies")
+
+		testImplementation		("org.assertj:assertj-core:2.9.0")
+
+		testImplementation		("pl.pragmatists:JUnitParams:1.1.1")
+	}
+
+	test() {
+
+		testLogging.showStandardStreams = true
+	}
+
+
+	jar() {
+
+		manifest() {
+
+			attributes(
+
+				"Built-By":					System.getProperty("user.name"),
+				"Built-Date":				new Date().format("yyyy-MM-dd"),
+				"Created-By":				"${javaHome.substring(javaHome.lastIndexOf('/') + 1)} (${System.getProperty('java.vendor')})",
+				"Implementation-Title":		project.name,
+				"Implementation-Version":	project.version
+			)
+		}
+	}
+
+
+	apply(plugin: "biz.aQute.bnd.builder")
+
+
+	// Couverture de code
+	apply(plugin: "jacoco")
+
+
+	// IDE / Eclipse
+	apply(plugin: "eclipse-wtp")
+	apply(plugin: "net.ltgt.apt-eclipse")
+
+	// IDE / Idea
+	apply(plugin: "idea")
+	apply(plugin: "net.ltgt.apt-idea")
+
+
+	apply(plugin: "maven-publish")
+
+	publishing() {
+
+		publications() {
+
+			mavenJava(MavenPublication) {
+
+				from components.java
+			}
+		}
+
+		repositories() {
+
+			maven() {
+
+				url = "${artifactoryHostUrl}/libs-${project.version.endsWith('-SNAPSHOT') ? 'snapshot' : 'release' }-local"
+
+				credentials() {
+
+					username = "admin"
+					password = "password"
+				}
+			}
+		}
+	}
+}
+
+
+apply(plugin: "org.sonarqube")
+
+project(":hms4j-example").sonarqube.skipProject = true
+project(":hms4j-example:hms4j-example-services").sonarqube.skipProject = true
+project(":hms4j-example:hms4j-example-services-module1").sonarqube.skipProject = true
+project(":hms4j-example:hms4j-example-services-module2").sonarqube.skipProject = true

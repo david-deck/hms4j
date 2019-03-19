@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="helloService" class="org.hms4j.example.service.impl.HelloServiceImpl"></bean>
+
+ 	<bean id="helloTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="cronExpression" value="10/15 * * * * ?"/>
+		<property name="jobDetail">
+			<bean class="org.springframework.scheduling.quartz.JobDetailBean">
+				<property name="applicationContextJobDataKey" value="applicationContext"/>
+				<property name="jobClass" value="org.hms4j.example.scheduling.HelloJob2"/>
+				<property name="name" value="helloJob2"/>
+			</bean>
+		</property>
+		<property name="name" value="helloTrigger2"/>
+	</bean>
+
+	<bean
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean"
+		destroy-method="stop"
+		lazy-init="false">
+		<property name="schedulerName" value="QuartzScheduler"/>
+		<property name="triggers">
+			<list>
+				<ref bean="helloTrigger2"/>
+			</list>
+		</property>
+	</bean>
+
+</beans>

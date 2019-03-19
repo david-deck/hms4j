@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean class="org.apache.cxf.jaxrs.JAXRSServerFactoryBean" init-method="create">
+		<property name="address" value="/sample"/>
+		<property name="bus" ref="cxfBus"/>
+		<property name="providers">
+			<list>
+				<bean class="org.apache.cxf.jaxrs.provider.JAXBElementProvider"/>
+				<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider"/>
+			</list>
+		</property>
+		<property name="serviceBean">
+			<bean class="org.hms4j.example.jaxrs.sample.Sample"/>
+		</property>
+	</bean>
+
+</beans>

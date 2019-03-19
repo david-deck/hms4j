@@ -1,0 +1,11 @@
+dependencies() {
+
+	compileOnly			("javax.servlet:servlet-api:${servletApiVersion}")
+
+	implementation		(project(":hms4j-core"))
+}
+
+test() {
+
+	testLogging.showStandardStreams = true
+}

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<wsdl:definitions targetNamespace="http://service.devis.jaxws.example.hms4j.org" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://service.devis.jaxws.example.hms4j.org" xmlns:intf="http://service.devis.jaxws.example.hms4j.org" xmlns:tns1="http://devis.jaxws.example.hms4j.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<!-- 
+WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)
+
+  --> 
+	<wsdl:types>
+		<schema elementFormDefault="qualified" targetNamespace="http://devis.jaxws.example.hms4j.org" xmlns="http://www.w3.org/2001/XMLSchema">
+			<complexType name="PrestationBean">
+				<sequence>
+					<element name="commentairePrestation" nillable="true" type="xsd:string" /> 
+					<element name="libellePrestation" nillable="true" type="xsd:string" /> 
+					<element name="quantitePrestation" nillable="true" type="xsd:long" /> 
+				</sequence>
+			</complexType>
+			<complexType name="Prestations">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="tns1:PrestationBean" /> 
+				</sequence>
+			</complexType>
+			<complexType name="DevisBean">
+				<sequence>
+					<element name="codeClientFinal" nillable="true" type="xsd:string" /> 
+					<element name="codeContrat" nillable="true" type="xsd:string" /> 
+					<element name="codeGenerique" nillable="true" type="xsd:string" /> 
+					<element name="commentaireDevis" nillable="true" type="xsd:string" /> 
+					<element name="immatriculation" nillable="true" type="xsd:string" /> 
+					<element name="numChassis" nillable="true" type="xsd:string" /> 
+					<element name="numeroTea" nillable="true" type="xsd:string" /> 
+					<element name="prestations" nillable="true" type="tns1:Prestations" /> 
+					<element name="referenceDevis" nillable="true" type="xsd:string" /> 
+				</sequence>
+			</complexType>
+			<complexType name="WebServiceResponse">
+				<sequence>
+					<element name="message" nillable="true" type="xsd:string" /> 
+					<element name="result" nillable="true" type="xsd:anyType" /> 
+					<element name="sessionId" nillable="true" type="xsd:string" /> 
+					<element name="statusCode" type="xsd:int" /> 
+					<element name="version" nillable="true" type="xsd:string" /> 
+				</sequence>
+			</complexType>
+		</schema>
+		<schema elementFormDefault="qualified" targetNamespace="http://service.devis.jaxws.example.hms4j.org" xmlns="http://www.w3.org/2001/XMLSchema">
+			<import namespace="http://devis.jaxws.example.hms4j.org" /> 
+			<element name="traiterDevis">
+				<complexType>
+					<sequence>
+						<element name="devisBean" type="tns1:DevisBean" /> 
+					</sequence>
+				</complexType>
+			</element>
+			<element name="traiterDevisResponse">
+				<complexType>
+					<sequence>
+						<element name="traiterDevisReturn" type="tns1:WebServiceResponse" /> 
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="traiterDevisResponse">
+		<wsdl:part element="impl:traiterDevisResponse" name="parameters" /> 
+	</wsdl:message>
+	<wsdl:message name="traiterDevisRequest">
+		<wsdl:part element="impl:traiterDevis" name="parameters" /> 
+	</wsdl:message>
+	<wsdl:portType name="DevisService">
+		<wsdl:operation name="traiterDevis">
+			<wsdl:input message="impl:traiterDevisRequest" name="traiterDevisRequest" /> 
+			<wsdl:output message="impl:traiterDevisResponse" name="traiterDevisResponse" /> 
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="devisServiceSoapBinding" type="impl:DevisService">
+		<wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" /> 
+		<wsdl:operation name="traiterDevis">
+			<wsdlsoap:operation soapAction="" /> 
+			<wsdl:input name="traiterDevisRequest">
+				<wsdlsoap:body use="literal" /> 
+			</wsdl:input>
+			<wsdl:output name="traiterDevisResponse">
+				<wsdlsoap:body use="literal" /> 
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="DevisServiceService">
+		<wsdl:port binding="impl:devisServiceSoapBinding" name="devisService">
+			<wsdlsoap:address location="http://localhost:62/ws/services/devisService" /> 
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

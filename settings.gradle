@@ -1,0 +1,16 @@
+rootProject.name = "hms4j"
+
+include("hms4j-core")
+
+include("hms4j-spring")
+
+include("hms4j-web")
+
+
+include("hms4j-example")
+
+include("hms4j-example:hms4j-example-services")
+
+include("hms4j-example:hms4j-example-services-module1")
+
+include("hms4j-example:hms4j-example-services-module2")
