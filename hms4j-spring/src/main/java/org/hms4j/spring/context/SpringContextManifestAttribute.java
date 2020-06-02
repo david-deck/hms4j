@@ -33,7 +33,7 @@ class SpringContextManifestAttribute {
 			return;
 		}
 
-		for (String directive : valueAsString.replaceAll(" ", "").split(";")) {
+		for (String directive : valueAsString.replace(" ", "").split(";")) {
 
 			if (directive.startsWith(CREATE_ASYNCHRONOUSLY_DIRECTIVE_PREFIX)) {
 
