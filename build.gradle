@@ -76,9 +76,14 @@ subprojects() {
 		}
 	}
 
-	sonarqube() {
-		properties() {
-			property("sonar.projectKey", "david-deck_hms4j")
-		}
+}
+
+sonarqube() {
+	properties() {
+		property("sonar.projectKey", "david-deck_hms4j")
 	}
 }
+project(":hms4j-example").sonarqube.skipProject = true
+project(":hms4j-example:hms4j-example-services").sonarqube.skipProject = true
+project(":hms4j-example:hms4j-example-services-module1").sonarqube.skipProject = true
+project(":hms4j-example:hms4j-example-services-module2").sonarqube.skipProject = true
