@@ -2,6 +2,7 @@ plugins() {
 	
 	id("biz.aQute.bnd.builder")	version("4.1.0")	apply(false)	// OSGi (MANIFEST.MF)
 	id("net.ltgt.apt-eclipse")	version("0.15")		apply(false)	// APT (OpenPojo)
+	id("org.sonarqube")			version("2.8")
 }
 
 allprojects() {
@@ -72,6 +73,14 @@ subprojects() {
 				"Implementation-Title":		project.name,
 				"Implementation-Version":	project.version
 			)
+		}
+	}
+
+	sonarqube() {
+		properties() {
+			property("sonar.projectKey", "david-deck_hms4j")
+			property("sonar.organization", "david-deck")
+			property("sonar.login", "ffaaf4dbd298e52c99400b0fa5c8e6a4fd8f6456")
 		}
 	}
 }
