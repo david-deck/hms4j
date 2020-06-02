@@ -79,8 +79,6 @@ subprojects() {
 	sonarqube() {
 		properties() {
 			property("sonar.projectKey", "david-deck_hms4j")
-			property("sonar.organization", "david-deck")
-			property("sonar.login", "ffaaf4dbd298e52c99400b0fa5c8e6a4fd8f6456")
 		}
 	}
 }
