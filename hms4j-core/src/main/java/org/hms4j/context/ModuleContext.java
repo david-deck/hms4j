@@ -13,50 +13,49 @@ import org.slf4j.LoggerFactory;
 
 public class ModuleContext implements AutoCloseable {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	private final File rootDir;
+  private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  private final File rootDir;
 
-	public ModuleContext(File rootDir) {
+  public ModuleContext(File rootDir) {
 
-		super();
-		this.rootDir = rootDir;
+    super();
+    this.rootDir = rootDir;
 
-		LOGGER.debug("new ModuleContext({})", rootDir);
-	}
+    LOGGER.debug("new ModuleContext({})", rootDir);
+  }
 
-	public void init() {
+  public void init() {
 
-		LOGGER.debug("init()");
+    LOGGER.debug("init()");
 
-		File[] moduleDirs = rootDir.listFiles((FileFilter) directoryFileFilter());
-		if (moduleDirs == null || moduleDirs.length == 0) {
-			LOGGER.warn("No module directory found in [{}]", rootDir.getAbsolutePath());
-			return;
-		}
+    File[] moduleDirs = rootDir.listFiles((FileFilter) directoryFileFilter());
+    if (moduleDirs == null || moduleDirs.length == 0) {
+      LOGGER.warn("No module directory found in [{}]", rootDir.getAbsolutePath());
+      return;
+    }
 
-		ClassLoader bootClassLoader = currentThread().getContextClassLoader();
+    ClassLoader bootClassLoader = currentThread().getContextClassLoader();
 
-		for (File moduleDir : moduleDirs) {
+    for (File moduleDir : moduleDirs) {
 
-			LOGGER.debug("moduleDir: [{}]", moduleDir);
+      LOGGER.debug("moduleDir: [{}]", moduleDir);
 
-			ModuleClassLoader classLoader = new ModuleClassLoader(bootClassLoader, moduleDir);
+      ModuleClassLoader classLoader = new ModuleClassLoader(bootClassLoader, moduleDir);
 
-			currentThread().setContextClassLoader(classLoader);
+      currentThread().setContextClassLoader(classLoader);
 
-			loadModule(moduleDir, moduleDir.listFiles(JAR), classLoader);
-		}
+      loadModule(moduleDir, moduleDir.listFiles(JAR), classLoader);
+    }
 
-		currentThread().setContextClassLoader(bootClassLoader);
-	}
+    currentThread().setContextClassLoader(bootClassLoader);
+  }
 
-	protected void loadModule(File moduleDir, File[] jarFiles, ClassLoader classLoader) {
-		LOGGER.debug("loadModule({}, {}, {})", moduleDir, jarFiles, classLoader);
-	}
+  protected void loadModule(File moduleDir, File[] jarFiles, ClassLoader classLoader) {
+    LOGGER.debug("loadModule({}, {}, {})", moduleDir, jarFiles, classLoader);
+  }
 
-	@Override
-	public void close() {
-		LOGGER.debug("close()");
-	}
+  @Override public void close() {
+    LOGGER.debug("close()");
+  }
 
 }

@@ -15,83 +15,81 @@ import org.slf4j.LoggerFactory;
 
 public class ModuleClassLoader extends ClassLoader {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	private final File[] jarFiles;
-	private final File moduleDir;
+  private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  private final File[] jarFiles;
+  private final File moduleDir;
 
-	ModuleClassLoader(ClassLoader parent, File moduleDir) {
-		super(parent);
-		this.moduleDir = moduleDir;
-		this.jarFiles = this.moduleDir.listFiles(JAR);
-	}
+  ModuleClassLoader(ClassLoader parent, File moduleDir) {
+    super(parent);
+    this.moduleDir = moduleDir;
+    this.jarFiles = this.moduleDir.listFiles(JAR);
+  }
 
-	@Override
-	public Class<?> loadClass(String name) throws ClassNotFoundException {
+  @Override public Class<?> loadClass(String name) throws ClassNotFoundException {
 
-		LOGGER.debug("loadClass({}), module: {}", name, moduleDir);
+    LOGGER.debug("loadClass({}), module: {}", name, moduleDir);
 
-		String path = name.replace('.', '/') + ".class";
+    String path = name.replace('.', '/') + ".class";
 
-		synchronized (getClassLoadingLock(name)) {
-			// First, check if the class has already been loaded
-			Class<?> c = findLoadedClass(name);
+    synchronized (getClassLoadingLock(name)) {
+      // First, check if the class has already been loaded
+      Class<?> c = findLoadedClass(name);
 
-			if (c == null) {
+      if (c == null) {
 
-				LOGGER.debug("class not loaded yet");
+        LOGGER.debug("class not loaded yet");
 
-				for (File file : jarFiles) {
+        for (File file : jarFiles) {
 
-					try (JarFile jarFile = new JarFile(file)) {
+          try (JarFile jarFile = new JarFile(file)) {
 
-						if (jarFile.getJarEntry(path) == null) {
-							continue;
-						}
+            if (jarFile.getJarEntry(path) == null) {
+              continue;
+            }
 
-						ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-						IOUtils.copy(jarFile.getInputStream(jarFile.getJarEntry(path)), byteArrayOutputStream);
-						byte[] bytes = byteArrayOutputStream.toByteArray();
-						return defineClass(name, bytes, 0, bytes.length);
-					} catch (IOException e) {
-						throw new ModuleRuntimeException(e);
-					}
-				}
-			}
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            IOUtils.copy(jarFile.getInputStream(jarFile.getJarEntry(path)), byteArrayOutputStream);
+            byte[] bytes = byteArrayOutputStream.toByteArray();
+            return defineClass(name, bytes, 0, bytes.length);
+          } catch (IOException e) {
+            throw new ModuleRuntimeException(e);
+          }
+        }
+      }
 
-			if (c == null) {
-				c = super.loadClass(name);
-			}
+      if (c == null) {
+        c = super.loadClass(name);
+      }
 
-			return c;
-		}
-	}
+      return c;
+    }
+  }
 
-	@Override
-	public URL getResource(String name) {
+  @Override public URL getResource(String name) {
 
-		LOGGER.debug("getResource({}), module: {}", name, moduleDir);
+    LOGGER.debug("getResource({}), module: {}", name, moduleDir);
 
-		URL url = null;
+    URL url = null;
 
-		for (File file : jarFiles) {
+    for (File file : jarFiles) {
 
-			try (JarFile jarFile = new JarFile(file)) {
+      try (JarFile jarFile = new JarFile(file)) {
 
-				if (jarFile.getJarEntry(name) == null) {
-					continue;
-				}
+        if (jarFile.getJarEntry(name) == null) {
+          continue;
+        }
 
-				url = new URL(String.format("jar:file:%s!/%s", file, name));
-			} catch (IOException e) {
-				throw new ModuleRuntimeException(e);
-			}
-		}
+        url = new URL(String.format("jar:file:%s!/%s", file, name));
+      } catch (IOException e) {
+        throw new ModuleRuntimeException(e);
+      }
+    }
 
-		if (url == null) {
-			url = super.getResource(name);
-		}
+    if (url == null) {
+      url = super.getResource(name);
+    }
 
-		return url;
-	}
+    return url;
+  }
 
 }

@@ -1,87 +1,84 @@
 plugins() {
-	
-	id("biz.aQute.bnd.builder")	version("4.1.0")	apply(false)	// OSGi (MANIFEST.MF)
-	id("net.ltgt.apt-eclipse")	version("0.15")		apply(false)	// APT (OpenPojo)
-	id("org.sonarqube")			version("2.8")
+  id("biz.aQute.bnd.builder") version("4.1.0") apply(false)  // OSGi (MANIFEST.MF)
+  id("net.ltgt.apt-eclipse")  version("0.15")  apply(false)  // APT (OpenPojo)
+  id("org.sonarqube")         version("2.8")
 }
 
 allprojects() {
-
-	repositories() {
-	
-		mavenCentral()
-	}
+  repositories() {
+    mavenCentral()
+  }
 }
 
 subprojects() {
 
-	apply(plugin: "java")
+  apply(plugin: "java")
 
-	sourceCompatibility = targetJavaVersion
+  sourceCompatibility = targetJavaVersion
 
-	tasks.withType(AbstractCompile) {
+  tasks.withType(AbstractCompile) {
 
-		options.with() {
+    options.with() {
 
-			encoding = "utf-8"
-			incremental = "true"
-		}
-	}
+      encoding = "utf-8"
+      incremental = "true"
+    }
+  }
 
-	// Tests
+  // Tests
 
-	dependencies() {
+  dependencies() {
 
-		implementation			("org.slf4j:slf4j-api:${slf4jVersion}")
+    implementation      ("org.slf4j:slf4j-api:${slf4jVersion}")
 
-		testImplementation		("com.openpojo:openpojo:0.8.10")
+    testImplementation    ("com.openpojo:openpojo:0.8.10")
 
-		testImplementation		("junit:junit:${junitVersion}")
+    testImplementation    ("junit:junit:${junitVersion}")
 
-		testImplementation		("net.karneim:pojobuilder:${pojobuilderVersion}:annotations")
-		testAnnotationProcessor	("net.karneim:pojobuilder:${pojobuilderVersion}:jar-with-dependencies")
+    testImplementation    ("net.karneim:pojobuilder:${pojobuilderVersion}:annotations")
+    testAnnotationProcessor  ("net.karneim:pojobuilder:${pojobuilderVersion}:jar-with-dependencies")
 
-		testImplementation		("org.assertj:assertj-core:2.9.0")
+    testImplementation    ("org.assertj:assertj-core:2.9.0")
 
-		testImplementation		("pl.pragmatists:JUnitParams:1.1.1")
-	}
+    testImplementation    ("pl.pragmatists:JUnitParams:1.1.1")
+  }
 
-	apply(plugin: "biz.aQute.bnd.builder")
+  apply(plugin: "biz.aQute.bnd.builder")
 
-	// Couverture de code
-	apply(plugin: "jacoco")
+  // Couverture de code
+  apply(plugin: "jacoco")
 
-	// IDE / Eclipse
-	apply(plugin: "eclipse-wtp")
-	apply(plugin: "net.ltgt.apt-eclipse")
+  // IDE / Eclipse
+  apply(plugin: "eclipse-wtp")
+  apply(plugin: "net.ltgt.apt-eclipse")
 
-	test() {
+  test() {
 
-		testLogging.showStandardStreams = true
-	}
+    testLogging.showStandardStreams = true
+  }
 
 
-	jar() {
+  jar() {
 
-		manifest() {
+    manifest() {
 
-			attributes(
+      attributes(
 
-				"Built-By":					System.getProperty("user.name"),
-				"Built-Date":				new Date().format("yyyy-MM-dd"),
-				"Created-By":				"${System.getProperty('java.home')} (${System.getProperty('java.vendor')})",
-				"Implementation-Title":		project.name,
-				"Implementation-Version":	project.version
-			)
-		}
-	}
+        "Built-By":          System.getProperty("user.name"),
+        "Built-Date":        new Date().format("yyyy-MM-dd"),
+        "Created-By":        "${System.getProperty('java.home')} (${System.getProperty('java.vendor')})",
+        "Implementation-Title":    project.name,
+        "Implementation-Version":  project.version
+      )
+    }
+  }
 
 }
 
 sonarqube() {
-	properties() {
-		property("sonar.projectKey", "david-deck_hms4j")
-	}
+  properties() {
+    property("sonar.projectKey", "david-deck_hms4j")
+  }
 }
 project(":hms4j-example").sonarqube.skipProject = true
 project(":hms4j-example:hms4j-example-services").sonarqube.skipProject = true
