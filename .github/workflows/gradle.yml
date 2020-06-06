@@ -29,3 +29,9 @@ jobs:
       run:  ./gradlew sonarqube --info
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload packages
+      uses: actions/upload-artifact@v1
+      with:
+        name: Package
+        path: build/libs
