@@ -25,56 +25,67 @@ subprojects() {
     }
   }
 
-  // Tests
-
   dependencies() {
 
-    implementation      ("org.slf4j:slf4j-api:${slf4jVersion}")
+    implementation("org.slf4j:slf4j-api:${slf4jVersion}")
 
-    testImplementation    ("com.openpojo:openpojo:0.8.10")
-
-    testImplementation    ("junit:junit:${junitVersion}")
-
-    testImplementation    ("net.karneim:pojobuilder:${pojobuilderVersion}:annotations")
-    testAnnotationProcessor  ("net.karneim:pojobuilder:${pojobuilderVersion}:jar-with-dependencies")
-
-    testImplementation    ("org.assertj:assertj-core:2.9.0")
-
-    testImplementation    ("pl.pragmatists:JUnitParams:1.1.1")
+    testAnnotationProcessor("net.karneim:pojobuilder:${pojobuilderVersion}:jar-with-dependencies")
+    testImplementation(
+      "com.openpojo:openpojo:0.8.10",
+      "junit:junit:${junitVersion}",
+      "net.karneim:pojobuilder:${pojobuilderVersion}:annotations",
+      "org.assertj:assertj-core:2.9.0",
+      "pl.pragmatists:JUnitParams:1.1.1"
+    )
   }
-
-  apply(plugin: "biz.aQute.bnd.builder")
-
-  // Couverture de code
-  apply(plugin: "jacoco")
-
-  // IDE / Eclipse
-  apply(plugin: "eclipse-wtp")
-  apply(plugin: "net.ltgt.apt-eclipse")
 
   test() {
 
     testLogging.showStandardStreams = true
   }
 
+  apply(plugin: "biz.aQute.bnd.builder")
 
   jar() {
-
     manifest() {
-
       attributes(
-
-        "Built-By":          System.getProperty("user.name"),
-        "Built-Date":        new Date().format("yyyy-MM-dd"),
-        "Created-By":        "${System.getProperty('java.home')} (${System.getProperty('java.vendor')})",
-        "Implementation-Title":    project.name,
-        "Implementation-Version":  project.version
+        "Built-By":               System.getProperty("user.name"),
+        "Built-Date":             new Date().format("yyyy-MM-dd"),
+        "Implementation-Title":   project.name,
+        "Implementation-Version": project.version
       )
     }
   }
 
+  // Code Coverage
+  apply(plugin: "jacoco")
+
+  // Publishing
+  apply(plugin: "maven-publish")
+  publishing() {
+    repositories() {
+      maven() {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/david-deck/hms4j")
+        credentials() {
+          username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+          password = project.findProperty("gpr.key")  ?: System.getenv("TOKEN")
+        }
+      }
+    }
+    publications() {
+      gpr(MavenPublication) {
+        from(components.java)
+      }
+    }
+  }
+
+  // Eclipse
+  apply(plugin: "eclipse-wtp")
+  apply(plugin: "net.ltgt.apt-eclipse")
 }
 
+// Code Quality
 sonarqube() {
   properties() {
     property("sonar.projectKey", "david-deck_hms4j")
