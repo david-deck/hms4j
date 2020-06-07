@@ -26,8 +26,7 @@ public class ModuleContextLoaderListener implements ServletContextListener {
 	protected File rootDir = new File(DEFAULT_MODULE_DIRECTORY);
 	private String servletContextAttribute;
 
-	@Override
-	public final void contextInitialized(ServletContextEvent sce) {
+	@Override public final void contextInitialized(ServletContextEvent sce) {
 
 		LOGGER.debug("contextInitialized(ServletContextEvent)");
 
@@ -64,8 +63,7 @@ public class ModuleContextLoaderListener implements ServletContextListener {
 		return new ModuleContext(rootDir);
 	}
 
-	@Override
-	public final void contextDestroyed(ServletContextEvent sce) {
+	@Override public final void contextDestroyed(ServletContextEvent sce) {
 
 		LOGGER.debug("contextDestroyed(ServletContextEvent)");
 

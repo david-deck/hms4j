@@ -35,6 +35,8 @@ subprojects() {
       "junit:junit:${junitVersion}",
       "net.karneim:pojobuilder:${pojobuilderVersion}:annotations",
       "org.assertj:assertj-core:2.9.0",
+      "org.powermock:powermock-api-mockito2:${powermockVersion}",
+      "org.powermock:powermock-module-junit4:${powermockVersion}",
       "pl.pragmatists:JUnitParams:1.1.1"
     )
   }
