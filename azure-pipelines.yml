@@ -18,6 +18,7 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
     codeCoverageToolOption: 'JaCoCo'
+    codeCoverageClassFilter: '-:hms4j-example*'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     sonarQubeRunAnalysis: true
