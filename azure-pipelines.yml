@@ -12,6 +12,8 @@ pool:
 steps:
 
 - task: Gradle@2
+  env:
+    SONAR_TOKEN: $(SONAR_TOKEN)
   inputs:
     gradleWrapperFile: 'gradlew'
     tasks: 'build --stacktrace'
