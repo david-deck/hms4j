@@ -3,23 +3,23 @@ description = "Quartz Web UI"
 
 configurations() {
 
-	all {
+  all {
 
-		resolutionStrategy() {
+    resolutionStrategy() {
 
-			dependencySubstitution() {
+      dependencySubstitution() {
 
-				substitute module("commons-logging:commons-logging") with module("org.slf4j:jcl-over-slf4j:${slf4jVersion}")
-			}
-		}
-	}
+        substitute module("commons-logging:commons-logging") with module("org.slf4j:jcl-over-slf4j:${slf4jVersion}")
+      }
+    }
+  }
 
-	cargo
+  cargo
 
-	modules {
+  modules {
 
-		transitive = false
-	}
+    transitive = false
+  }
 }
 
 
@@ -27,105 +27,105 @@ apply(plugin: "war")
 
 dependencies {
 
-	compileOnly		("javax.servlet:servlet-api:${servletApiVersion}")
+  compileOnly    ("javax.servlet:servlet-api:${servletApiVersion}")
 
-	runtimeOnly		("javax.transaction:jta:1.1")
+  runtimeOnly    ("javax.transaction:jta:1.1")
 
-	implementation	("commons-betwixt:commons-betwixt:0.8")
+  implementation  ("commons-betwixt:commons-betwixt:0.8")
 
-	runtime			("displaytag:displaytag:1.1.1") {
+  runtime      ("displaytag:displaytag:1.1.1") {
 
-						// itext
-						exclude(group: "com:lowagie")
+            // itext
+            exclude(group: "com:lowagie")
 
-						exclude(group: "org.slf4j")
-	}
+            exclude(group: "org.slf4j")
+  }
 
-	implementation	("opensymphony:quartz:${quartzVersion}")
+  implementation  ("opensymphony:quartz:${quartzVersion}")
 
-	implementation	("org.slf4j:jcl-over-slf4j:${slf4jVersion}")
-	runtimeOnly		("org.slf4j:slf4j-log4j12:${slf4jVersion}")
+  implementation  ("org.slf4j:jcl-over-slf4j:${slf4jVersion}")
+  runtimeOnly    ("org.slf4j:slf4j-log4j12:${slf4jVersion}")
 
-	implementation	("org.apache.struts:struts2-core:${strutsVersion}") {
-						exclude(group: "commons-fileupload")
-	}
-	runtimeOnly		("org.apache.struts:struts2-sitemesh-plugin:${strutsVersion}") {
-						exclude(group: "junit")
-	}
-	runtimeOnly		("org.apache.struts:struts2-spring-plugin:${strutsVersion}") {
-						exclude(group: "org.springframework")
-	}
-
-
-	runtimeOnly		(project(":hms4j-spring"))
-	runtimeOnly		(project(":hms4j-example:hms4j-example-services"))
-
-	// CXF - REST
-	runtimeOnly		("com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.4")
-	implementation	("org.apache.cxf:cxf-rt-frontend-jaxrs:${cxfVersion}")
-	runtimeOnly		("org.apache.cxf:cxf-rt-rs-service-description:${cxfVersion}")
-	implementation	("org.apache.cxf:cxf-rt-rs-service-description-swagger:${cxfVersion}")
-	runtimeOnly		("org.apache.cxf:cxf-rt-transports-http:${cxfVersion}")
-	runtimeOnly		("org.webjars:swagger-ui:3.20.5")
-	// CXF - SOAP
-	implementation	("org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}")
-
-	int springMajorVersion = Integer.parseInt(springVersion.substring(0,1))
-	runtimeOnly		("org.springframework:spring-${springMajorVersion < 3 ? 'dao' : 'tx'}:${springVersion}")
-	runtimeOnly		("org.springframework:spring${springMajorVersion < 3 ? '' : '-context'}-support:${springVersion}")
-	runtimeOnly		("org.springframework:spring-web:${springVersion}")
+  implementation  ("org.apache.struts:struts2-core:${strutsVersion}") {
+            exclude(group: "commons-fileupload")
+  }
+  runtimeOnly    ("org.apache.struts:struts2-sitemesh-plugin:${strutsVersion}") {
+            exclude(group: "junit")
+  }
+  runtimeOnly    ("org.apache.struts:struts2-spring-plugin:${strutsVersion}") {
+            exclude(group: "org.springframework")
+  }
 
 
-	modules			(project(":hms4j-example:hms4j-example-services-module1"))
-	modules			(project(":hms4j-example:hms4j-example-services-module2"))
+  runtimeOnly    (project(":hms4j-spring"))
+  runtimeOnly    (project(":hms4j-example:hms4j-example-services"))
+
+  // CXF - REST
+  runtimeOnly    ("com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.8.4")
+  implementation  ("org.apache.cxf:cxf-rt-frontend-jaxrs:${cxfVersion}")
+  runtimeOnly    ("org.apache.cxf:cxf-rt-rs-service-description:${cxfVersion}")
+  implementation  ("org.apache.cxf:cxf-rt-rs-service-description-swagger:${cxfVersion}")
+  runtimeOnly    ("org.apache.cxf:cxf-rt-transports-http:${cxfVersion}")
+  runtimeOnly    ("org.webjars:swagger-ui:3.20.5")
+  // CXF - SOAP
+  implementation  ("org.apache.cxf:cxf-rt-frontend-jaxws:${cxfVersion}")
+
+  int springMajorVersion = Integer.parseInt(springVersion.substring(0,1))
+  runtimeOnly    ("org.springframework:spring-${springMajorVersion < 3 ? 'dao' : 'tx'}:${springVersion}")
+  runtimeOnly    ("org.springframework:spring${springMajorVersion < 3 ? '' : '-context'}-support:${springVersion}")
+  runtimeOnly    ("org.springframework:spring-web:${springVersion}")
 
 
-	cargo			("org.codehaus.cargo:cargo-ant:1.7.2")
+  modules      (project(":hms4j-example:hms4j-example-services-module1"))
+  modules      (project(":hms4j-example:hms4j-example-services-module2"))
+
+
+  cargo      ("org.codehaus.cargo:cargo-ant:1.7.2")
 }
 
 
 war() {
 
-	archiveVersion = ""
+  version = ""
 
-	dependsOn = [configurations.modules]
+  dependsOn = [configurations.modules]
 
-	configurations.modules.each {
-		File file = it
-		into ("WEB-INF/lib/modules/${file.name.replace('.jar', '')}") {
-			from (file)
-		}
-	}
+  configurations.modules.each {
+    File file = it
+    into ("WEB-INF/lib/modules/${file.name.replace('.jar', '')}") {
+      from (file)
+    }
+  }
 }
 
 
 task runLocalTomcat(dependsOn: war, group: "verification") {
 
-	doLast() {
+  doLast() {
 
-		def tomcatVersion = "6.0.33"
+    def tomcatVersion = "6.0.33"
 
-		ant.lifecycleLogLevel = "INFO"
+    ant.lifecycleLogLevel = "INFO"
 
-		ant.taskdef(classpath: configurations.cargo.asPath, resource: "cargo.tasks")
+    ant.taskdef(classpath: configurations.cargo.asPath, resource: "cargo.tasks")
 
-		ant.cargo(
-			containerId: "tomcat${tomcatVersion.charAt(0)}x",
-			action: "run",
-			timeout: 360000
-			) {
+    ant.cargo(
+      containerId: "tomcat${tomcatVersion.charAt(0)}x",
+      action: "run",
+      timeout: 360000
+      ) {
 
-			configuration() {
-				deployable(file: war.archivePath, type: "war")
+      configuration() {
+        deployable(file: war.archivePath, type: "war")
 
-				property(name: "cargo.java.home",		value: javaHome)
-				property(name: "cargo.jvmargs",			value: "-Xms1g -Xmx1g -Dorg.apache.cxf.useSpringClassHelpers=false")
-				property(name: "cargo.logging",			value: "low")
-			}
+        property(name: "cargo.java.home",    value: javaHome)
+        property(name: "cargo.jvmargs",      value: "-Xms1g -Xmx1g -Dorg.apache.cxf.useSpringClassHelpers=false")
+        property(name: "cargo.logging",      value: "low")
+      }
 
-			zipurlinstaller(
-				installurl: "http://archive.apache.org/dist/tomcat/tomcat-${tomcatVersion.charAt(0)}/v${tomcatVersion}/bin/apache-tomcat-${tomcatVersion}.zip"
-			)
-		}
-	}
+      zipurlinstaller(
+        installurl: "http://archive.apache.org/dist/tomcat/tomcat-${tomcatVersion.charAt(0)}/v${tomcatVersion}/bin/apache-tomcat-${tomcatVersion}.zip"
+      )
+    }
+  }
 }

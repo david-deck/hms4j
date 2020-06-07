@@ -14,11 +14,9 @@ steps:
 - task: Gradle@2
   inputs:
     gradleWrapperFile: 'gradlew'
-    tasks: 'build'
+    tasks: 'build --stacktrace'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
-    codeCoverageToolOption: 'JaCoCo'
-    codeCoverageClassFilter: '-:hms4j-example*'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     sonarQubeRunAnalysis: true

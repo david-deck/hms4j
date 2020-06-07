@@ -1,22 +1,22 @@
 dependencies() {
 
-	compileOnly			("javax.servlet:servlet-api:${servletApiVersion}")
+  compileOnly("javax.servlet:servlet-api:${servletApiVersion}")
 
-	implementation		(project(":hms4j-core"))
-	implementation		(project(":hms4j-web"))
+  implementation(project(":hms4j-core"))
+  implementation(project(":hms4j-web"))
 
-	compileOnly			("org.springframework:spring-web:${springVersion}")
-	// bug spring 2.0-rc2
-	compileOnly			("org.springframework:spring-beans:${springVersion}")
-	compileOnly			("org.springframework:spring-context:${springVersion}")
-	compileOnly			("org.springframework:spring-core:${springVersion}")
+  compileOnly("org.springframework:spring-web:${springVersion}")
+  // bug spring 2.0-rc2
+  compileOnly("org.springframework:spring-beans:${springVersion}")
+  compileOnly("org.springframework:spring-context:${springVersion}")
+  compileOnly("org.springframework:spring-core:${springVersion}")
 
 
-	testImplementation	("junit:junit:${junitVersion}")
+  testImplementation("junit:junit:${junitVersion}")
 
-	testImplementation	("opensymphony:quartz:${quartzVersion}")
-	testImplementation	("org.springframework:spring-context:${springVersion}")
-	// bug spring 2.0-rc2
-	testImplementation	("org.springframework:spring-beans:${springVersion}")
-	testImplementation	("org.springframework:spring-core:${springVersion}")
+  testImplementation("opensymphony:quartz:${quartzVersion}")
+  testImplementation("org.springframework:spring-context:${springVersion}")
+  // bug spring 2.0-rc2
+  testImplementation("org.springframework:spring-beans:${springVersion}")
+  testImplementation("org.springframework:spring-core:${springVersion}")
 }

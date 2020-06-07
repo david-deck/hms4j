@@ -1,5 +1,6 @@
 package org.hms4j.web.context;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.hms4j.web.context.ModuleContextLoaderListener.MODULE_DIRECTORY_PARAM;
 import static org.mockito.Mockito.*;
 import javax.servlet.ServletContext;
@@ -30,6 +31,8 @@ public class ModuleContextLoaderListenerTests {
     when(servletContext.getInitParameter(MODULE_DIRECTORY_PARAM)).thenReturn("foo");
 
     moduleContextLoaderListener.contextInitialized(servletContextEvent);
+
+    assertThat(moduleContextLoaderListener.rootDir).isNotNull();
   }
 
 }

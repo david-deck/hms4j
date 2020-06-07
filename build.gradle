@@ -61,6 +61,12 @@ subprojects() {
 
   // Code Coverage
   apply(plugin: "jacoco")
+  jacocoTestReport() {
+    reports() {
+      html.enabled(false)
+      xml.enabled(true)
+    }
+  }
 
   // Publishing
   apply(plugin: "maven-publish")
@@ -97,3 +103,4 @@ project(":hms4j-example").sonarqube.skipProject = true
 project(":hms4j-example:hms4j-example-services").sonarqube.skipProject = true
 project(":hms4j-example:hms4j-example-services-module1").sonarqube.skipProject = true
 project(":hms4j-example:hms4j-example-services-module2").sonarqube.skipProject = true
+tasks.sonarqube.dependsOn = subprojects.jacocoTestReport
